@@ -48,9 +48,7 @@
   <div id="more-popout" class="nav-closed">
     <div class="nav-item">
       <div class="icon-container">
-        <img
-          src="https://pbs.twimg.com/profile_images/1153329245248053248/xONN2R7u_400x400.png"
-        />
+
       </div>
       <div class="nav-text">
         <p>Ian | Gibbu</p>
@@ -177,11 +175,11 @@
       <div class="bottom">
         <a href="#">
           <p>총 게시글</p>
-          <h3 style="color: white">2</h3>
+          <h3 style="color: white;text-align:center;">2</h3>
         </a>
         <a href="#">
           <p>멤버</p>
-          <h3 style="color: white">3</h3>
+          <h3 style="color: white;text-align:center;">3</h3>
         </a>
       </div>
     </div>
@@ -193,7 +191,7 @@
       <div class="new-tweet" style="border: 1px solid;border-radius: 2em;color:	#C0C0C0">
         <textarea placeholder="새로운 소식을 남겨보세요."></textarea>
         <div class="registerModal">
-          <RegisterModal @close="closeRegisterModal" v-if="registerModal" />
+          <!-- <RegisterModal @close="closeRegisterModal" v-if="registerModal" /> -->
         </div>
         <div class="btns">
           <div class="btn">
@@ -205,7 +203,7 @@
             </button>
           </div>
           <div class="btn">
-            <button @click="openMapModal">
+            <button @click="toggleMap">
               <img
                 src="@/assets/images/onMeeting/map-icon2.png"
                 alt=""
@@ -213,6 +211,8 @@
                 height="25"
               />
             </button>
+            <!-- <MapModal ref="map" @close="closeMapModal" /> -->
+            <MapModal v-if="isOpen" @close-req="toggleMap" @send-addr="sendAddr" />
           </div>
           <div class="btn">
             <button>게시</button>
@@ -220,9 +220,9 @@
         </div>
       </div>
 
-      <div class="MapModal">
-        <MapModal @close="closeMapModal" v-if="mapModal" />
-      </div>
+
+        
+
 
       <!--게시물 올라오는 곳 --> <!--이게 반복되면 되는 것임!! -->
       <!-- 이거 클릭하면 해당 게시물 디테일 나오면 됨..--> 
@@ -325,45 +325,35 @@
           </div>
           <hr />
           <div class="result">
-            <img
-              src="https://pbs.twimg.com/profile_images/1042095789894295552/2xCUFmgU_normal.jpg"
-            />
+
             <div class="right">
               <p>YouTube Gaming</p>
               <span>@YouTubeGaming</span>
             </div>
           </div>
           <div class="result">
-            <img
-              src="https://pbs.twimg.com/profile_images/1148327441527689217/1QpS06D6_normal.png"
-            />
+
             <div class="right">
               <p>YouTube</p>
               <span>@YouTube</span>
             </div>
           </div>
           <div class="result">
-            <img
-              src="https://pbs.twimg.com/profile_images/1148364735034691585/OVoeKZYC_normal.png"
-            />
+
             <div class="right">
               <p>YouTube Creators</p>
               <span>@YTCreators</span>
             </div>
           </div>
           <div class="result">
-            <img
-              src="https://pbs.twimg.com/profile_images/1148267294004600832/Vibmuz25_normal.png"
-            />
+
             <div class="right">
               <p>YouTube TV</p>
               <span>@youtubemusic</span>
             </div>
           </div>
           <div class="result">
-            <img
-              src="https://pbs.twimg.com/profile_images/1148296104611635201/VlnAnBaz_normal.jpg"
-            />
+ 
             <div class="right">
               <p>YouTube Music</p>
               <span>@youtubemusic</span>
@@ -386,12 +376,8 @@
               <p>몽몽에 오신걸 환영합니다.</p>
             </div>
           </a>
-          <a
-            href="#"
-            class="btn blue"
-            style="background: #87cefa; text-align: center;color: #fff;"
-            >글쓰기</a
-          >
+          <hr>
+          <p align="right" style="font-size:13px"><img src="@/assets/images/onMeeting/setting.png" style="width:15px;height:15px;margin-right:10px;">모임 설정</p>
         </main>
       </section>
       <section>
@@ -422,6 +408,8 @@ import MapModal from "@/components/meeting/onMeeting/board/registerModal/mapModa
 import ReplyList from "@/components/meeting/onMeeting/board/reply/replyList.vue";
 import CreateReply from "@/components/meeting/onMeeting/board/reply/createReply.vue";
 import BoardDetail from "@/components/meeting/onMeeting/board/boardDetail.vue";
+import { ref } from 'vue';
+
 
 export default {
   name: "BoardList",
@@ -444,19 +432,19 @@ export default {
     openMapModal() {
       this.mapModal = true;
     },
+    closeMapModal() {
+      this.mapModal = false;
+    },
     openBoardModal() {
         base.openBoardModal();
     //     console.log("###")
     //   this.boardModal = true;
     },
-    openRegisterModal() {
-      this.registerModal = true;
-    },
-    closeMapModal() {
-      this.mapModal = false;
-    },
     closeBoardModal() {
       this.boardModal = false;
+    },
+    openRegisterModal() {
+      this.registerModal = true;
     },
     closeRegisterModal() {
       this.registerModal = false;
@@ -465,10 +453,32 @@ export default {
   mounted() {
       let base = this;
       base.openBoardModal = this.$refs.boardDetail.openBoardModalFunc;
+     // base.openMapModal = this.$refs.map.openMapModalFunc;
 
-      console.log(`!!! ${base.openBoardModal}`);
+     // console.log(`!!! ${base.openMapModal}`);
 
   },
+  setup() {
+    const isOpen = ref(false);
+
+    const toggleMap = () => {
+      console.log("KANG!!!")
+            isOpen.value = !isOpen.value;
+            // emit('toggle-modal', isOpen.value);
+        }
+
+    const sendAddr = (addr) => {
+            address.value = addr;
+        }
+
+
+
+    return {
+      isOpen,
+      toggleMap,
+      sendAddr,
+    }
+  }
 };
 </script>
 

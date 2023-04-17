@@ -65,12 +65,14 @@ export default {
 
 
     const openBoardModalFunc = () => {
-      modal[0].style.display = "block";
+      console.log("open!!!");
+      console.log(modal);
+      modal[1].style.display = "block";
     };
 
     const closeModalFunc = () => {
-      console.log("CLOSW@@")
-      modal[0].style.display = "none";
+      console.log("CLOSE BOARD MODAL");
+      modal[1].style.display = "none";
     };
 
     // const submitBoardDetailForm = () => {
@@ -534,7 +536,7 @@ header.nav-closed {
 //여기다 디테일모달
 .tweet {
   border-top: 1px solid var(--bg2);
-  padding: 200px;
+  padding: 100%;
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
@@ -867,28 +869,42 @@ header.nav-closed {
 }
 .modal{
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    z-index: 100;
 }
 .tweet {
+  // position: fixed;
+  // top:0; left: 0; bottom: 0; right: 0;
+  // background: rgba(0, 0, 0, 0.8);
     background-color : $red;
     position: relative;
+    // position: fixed;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
     background-repeat: no-repeat;
     overflow-x: hidden;
-    z-index: 500;
+    z-index: 200;
+ //   cursor: pointer;
+    //box-shadow: ewd
 }
 .tweet-content {
     opacity: 1;
     background-color: white;
     position: relative;
-    max-width: 80%;
+    max-width: 60%;
+    min-height: 70%;
     margin: auto;
     margin-top: 30px;
     padding: 20px;
-    min-height: 500px;
-    z-index: 1000;
+    z-index: 300;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
 }
 
 
