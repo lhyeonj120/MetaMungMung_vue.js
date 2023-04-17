@@ -1,0 +1,44 @@
+.content {
+    width: 100%;
+}
+
+.profile {
+    text-align: center;
+}
+
+.profile-image {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .menu {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: -30px;
+  }
+
+  .menu ul li{
+    background-color: #7abfdb;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    padding: 5px 10px 5px 5px;
+    color: white;
+  }
+
+  #preview-image {
+    width: 200px;
+    height: 200px;
+    border: 0;
+    border-radius: 90%;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #7abfdb;
+    background-repeat : no-repeat;
+}
+#edit {
+    position: relative;
+    margin-top: -60px;
+    margin-bottom: 20px;
+    margin-left: 130px;
+    border-radius: 100%;
+}
