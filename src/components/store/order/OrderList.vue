@@ -132,19 +132,19 @@ export default {
 }
 
 .blog-item .post-title a {
-    color: #8e8aad;
+    color: #007bff;
     transition: all .2s ease;
 }
 
 .blog-item .post-title a:hover {
-    color: #6C55F9;
+    color: #0072ff;
     text-decoration: none;
 }
 
 .blog-item .meta a {
     margin-right: 6px;
     font-size: 12px;
-    color: #645F88;
+    color: #89cbeb;
 }
 
 .blog-item .meta a:hover {
@@ -160,7 +160,8 @@ export default {
 }
   
 .widget-title {
-    color: #6C55F9;
+    color: #007bff;
+    font-weight: 800;
 }
 
 .divider {
@@ -170,7 +171,7 @@ export default {
     width: 32px;
     height: 3px;
     border-radius: 40px;
-    background-color: #6C55F9;
+    background-color: #a1b5cb;
 }
 
 </style>

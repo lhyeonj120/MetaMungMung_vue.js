@@ -1,33 +1,34 @@
 <template>
-<div class="services_section layout_padding">
-      <div class="container">
+  <div class="services_section layout_padding">
+    <div class="container">
         
-  <div class="page-section">
-      <div class="container">
-      	<!--중단 상품리스트 -->
-	      <div style="margin: 0; padding: 0; border: 0; box-sizing: border-box; font-family: '맑은고딕', 'Malgun Gothic', 'dotum', sans-serif; letter-spacing: -1px; padding: 11px 0 0; color: #89cbeb; font-size: 32px; line-height: 41px; letter-spacing: -2px;">
-          주문하기
+      <div class="page-section">
+        <div class="container">
+          <!--중단 상품리스트 -->
+          <div style="margin: 0; padding: 0; border: 0; box-sizing: border-box; font-family: '맑은고딕', 'Malgun Gothic', 'dotum', sans-serif; letter-spacing: -1px; padding: 11px 0 0; color: #89cbeb; font-size: 32px; line-height: 41px; letter-spacing: -2px;">
+            주문하기
+          </div>
         </div>
-			</div>
-	</div>
-
-  <form @submit.prevent="doPay">
-  <!-- <form> -->
-    <div class="contents">
-
-        <OrderMemInfo/>
-        <OrderProductInfo/>
-        <OrderPayInfo/>
-      <input type="hidden" name="payment_amount" id="paymentAmountInput" v-model="paymentAmount"/>
-      <input type="hidden" name="usePoint" id="usePointInput" v-model="usePoint"/>
-      <div class="btnFooter">
-        <button type="button" class="_btnCancel uButton -sizeXL -cancel" @click="cancel">취소</button>
-        <button type="submit" class="_btnConfirm uButton -sizeXL -disabled" id="paymentBtn" @click="check">결제</button>
-    </div>
-    </div>
-  </form>
       </div>
-</div>
+
+      <form @submit.prevent="doPay">
+      <!-- <form> -->
+        <div class="contents">
+
+          <OrderMemInfo/>
+          <OrderProductInfo/>
+          <OrderPayInfo/>
+          
+          <input type="hidden" name="payment_amount" id="paymentAmountInput" v-model="paymentAmount"/>
+          <input type="hidden" name="usePoint" id="usePointInput" v-model="usePoint"/>
+          <div class="btnFooter">
+            <button type="button" class="_btnCancel uButton -sizeXL -cancel" @click="cancel">취소</button>
+            <button type="submit" class="_btnConfirm uButton -sizeXL -disabled" id="paymentBtn" @click="check">결제</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script>
