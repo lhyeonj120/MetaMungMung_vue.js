@@ -1,101 +1,144 @@
 <template>
   <div class="services_section layout_padding">
     <div class="container">
-      <h1 class="services_taital">
-        <span>스토어</span>
-        <img
-          src="@/assets/images/offMeeting/paw-print.png"
-          style="width: 70px"
-        />
-        <span style="color: #1f1f1f">멍멍스토어</span>
-      </h1>
-      <!--일반-->
-      <div class="bn-line"></div>
-      <div class="top-line"></div>
+      <article class="purchase-sec">
+        <div class="product_wrap">
+          <div class="shopView">
+            <router-link :to="{ name: 'ProductPage' }" @click="moveToPage()">
+              <h1 class="services_taital">
+                <span>스토어</span>
+                <img
+                  src="@/assets/images/offMeeting/paw-print.png"
+                  style="width: 70px"
+                />
+                <span style="color: #1f1f1f">멍멍스토어</span>
+              </h1>
+            </router-link>
 
-      <!-- 카테고리 -->
-      <article class="product">
-        <section>
-          <div class="mo-into-title">
-            <div style="min-width: 700px" class="sub-title">
-              <span
-                style="text-algin: center; width: 100px; height: 50px"
-                class="box ivory"
-                >간식 / 사료</span
-              >
-            </div>
-
-            <div style="margin-bottom: -30px" class="main-title">
-              <h3>[냠냠] 펫밀크 퓨추라 럭스</h3>
-              <!-- <h3 style="color: black; font-weight: bolder">15,000원</h3> -->
-            </div>
-          </div>
-
-          <div class="detail">
-            <div class="detail-photo">
+            <div class="viewHeader">
+              <!-- 상품이미지 -->
               <img
-                id="detail-img"
-                src="https://images-dev.wefluffy.co.kr/product-option/8149/1000011210_detail_069.webp"
-              />
-            </div>
-            <form class="option-box">
-              <div style="margin-top: 30px" class="price">
-                <span
-                  class="sale"
-                  style="color: red; fone-weight: bold; font-size: 20px"
-                  >20<span>%</span></span
-                >
-                <span class="cost-price">15000원</span>
-                <span style="color: black" class="sale-price">15000원</span>
-              </div>
-
-              <div class="quantity">
-                <span>수량</span>
-                <input type="text" value="1" />
-                <span class="minus">-</span>
-                <span class="plus">+</span>
-              </div>
-
-              <div class="mo-btn-box">
-                <button id="pd-detail-btn" type="button" name="cart">
-                  장바구니
-                </button>
-                <button type="button" id="pd-detail-btn" name="justdoit">
-                  바로 구매
-                </button>
-              </div>
-
-              <div class="pc-btn-box">
-                <button id="pd-detail-btn" type="button" name="justdoit">
-                  바로 구매
-                </button>
-                <div class="pc-side-btn">
-                  <button id="pd-detail-btn" type="button" name="cart">
-                    장바구니
-                  </button>
-                  <button id="pd-detail-btn" type="button" name="wish">
-                    위시리스트
-                  </button>
-                </div>
-              </div>
-              <img
-                src="https://images-dev.wefluffy.co.kr/product-detail/1000011210/82608_detail1.webp"
+                style="object-fit: cover; max-height: 600px"
+                class="productDetailImg"
+                id="imageMain"
+                :src="product.productImg"
                 alt=""
               />
-            </form>
+
+              <!-- 상품 설명 -->
+              <div class="productInfo" style="margin-bottom: 30px">
+                <div class="infoItem title">
+                  <div>
+                    <h3>[{{ product.brand }}] {{ product.productName }}</h3>
+                    <p class="guidetxt">{{ product.productDetail }}</p>
+
+                    <span class="deliver">무료배송</span>
+
+                    <strong class="price"
+                      >{{ product.price.toLocaleString() }} 원</strong
+                    >
+                  </div>
+                  <div class="btns-box">
+                    <button class="purchase_like"><span>찜하기</span></button>
+                  </div>
+                </div>
+
+                <div class="infoItem itemOptions">
+                  <p class="title">제품선택</p>
+
+                  <select
+                    v-model="selectedOption"
+                    @change="setSelect()"
+                    id="colorOption"
+                  >
+                    <option
+                      v-for="(item, index) in optionList"
+                      :key="index"
+                      :value="item.value"
+                    >
+                      {{ item.name }}
+                    </option>
+                  </select>
+
+                  <div class="selectOptionResult">
+                    <div id="white" class="options">
+                      <ul>
+                        <li>
+                          <p>
+                            <span style="font-weight: bold"
+                              >[{{ product.brand }}]</span
+                            >
+                            {{ product.productName }}
+                          </p>
+                        </li>
+                        <li>
+                          <div class="count">
+                            <div
+                              class="countbtn"
+                              @click="count('minus')"
+                              value="-"
+                            >
+                              -
+                            </div>
+                            <input
+                              type="number"
+                              id="result"
+                              value="1"
+                              readonly
+                            />
+                            <div
+                              class="countbtn"
+                              @click="count('plus')"
+                              value="+"
+                            >
+                              +
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <span id="total">{{
+                            product.price.toLocaleString()
+                          }}</span
+                          >원
+                        </li>
+                        <li @click="close">X</li>
+                      </ul>
+                    </div>
+
+                    <span id="warning">1개 미만은 구매할 수 없습니다.</span>
+                  </div>
+                </div>
+
+                <div class="all-price">
+                  <p>총 상품금액</p>
+                  <p><span id="alltotal">0</span>원</p>
+                </div>
+
+                <div class="btns-box">
+                  <button class="input_other">장바구니 담기</button>
+                  <button class="input_primary">바로 구매하기</button>
+                </div>
+              </div>
+            </div>
+
+            <img
+              class="productDetailImg"
+              src="https://images-dev.wefluffy.co.kr/product-detail/1000011210/82608_detail1.webp"
+              alt=""
+            />
             <!-- 상품정보 -->
             <table class="table">
               <tr>
-                <td>제품명</td>
-                <td>배고파?</td>
-                <td>식품의 유형</td>
-                <td>기타</td>
+                <td>상품명</td>
+                <td>{{ product.productName }}</td>
+                <td>분류</td>
+                <td>{{ product.category }}</td>
               </tr>
               <tr>
                 <td>브랜드</td>
-                <td>일단밥을먹어</td>
-                <td>배송타입</td>
-                <td>뇸뇸뇸</td>
+                <td>{{ product.brand }}</td>
+                <td>용량</td>
+                <td>{{ product.volume }}</td>
               </tr>
               <tr>
                 <td>제조년월일</td>
@@ -105,364 +148,101 @@
               </tr>
             </table>
           </div>
-
-          <div class="infomation">
-            <div class="infomation-container">
-              <div style="margin-bottom: -50px" class="pc-into-title">
-                <div class="sub-title">
-                  <span
-                    style="margin-top: -30px; width: 100px; height: 50px"
-                    class="box ivory"
-                    >간식 / 사료</span
-                  >
-                </div>
-
-                <div class="main-title">
-                  <h2>펫밀크</h2>
-                  <span
-                    style="color: black; font-weight: bold; font-size: 20px"
-                    class="orange"
-                    >15000원</span
-                  >
-                </div>
-              </div>
-
-              <div class="pickup">
-                <div class="stop-pickup">
-                  <p>매장 픽업 서비스가 한시적으로 중단됩니다.</p>
-                  <span class="line">자세히 보기</span>
-                </div>
-              </div>
-
-              <div class="custom">
-                <div class="color-style">
-                  <p>• 상품명 : 블랙/블랙/화이트</p>
-                  <p>• 카테고리 : DR7194-010</p>
-                  <p>• 브랜드 : DR7194-010</p>
-                  <p>• 용량 : DR7194-010</p>
-                  <span class="line" onclick="하잉()">더 보기</span>
-                </div>
-              </div>
-
-              <div class="infomation-accordion">
-                <div class="acco-wrapper">
-                  <div class="acco-section open">
-                    <h4 class="acco-title">고객안내</h4>
-                    <div class="acco-content">
-                      <strong> 간편결제 이벤트 안내 </strong>
-                      <p>
-                        PAYCO 충전포인트 결제 시, 추가 적립 혜택이 제공됩니다.
-                      </p>
-                      <span class="line">이벤트 자세히 보기</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="acco-wrapper">
-                  <div class="acco-section close">
-                    <h4 class="acco-title">리뷰</h4>
-                    <div class="acco-content">
-                      <span class="line">리뷰 작성하기</span>
-                      <h3>★★★★☆<br />18개의 REVIEWS</h3>
-
-                      <div class="review">
-                        <p class="bold">컬러</p>
-                        <div class="review-value">
-                          <div class="gage">
-                            <span class="gage-color-dot"></span>
-                          </div>
-
-                          <div class="value-txt">
-                            <span class="left-txt">화면보다 밝은</span>
-                            <span class="right-txt">화면보다 어두운</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="review">
-                        <p class="bold">사이즈</p>
-                        <div class="review-value">
-                          <div class="gage">
-                            <span class="gage-size-dot"></span>
-                          </div>
-
-                          <div class="value-txt">
-                            <span class="left-txt">작은</span>
-                            <span class="right-txt">큰</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="real-review">
-                        <div class="review-summary">
-                          <strong>생각보다 작음요</strong>
-                          <p>★★★★★</p>
-                          <div class="small-gray">
-                            <h5>채뭉길</h5>
-                            <h5>2022.09.15</h5>
-                            <h5>DR7194-010</h5>
-                            <h5>L</h5>
-                          </div>
-                          <p>
-                            휘뚜루마뚜루 막 들고 다니기 좋아요. 와이프
-                            조공용으로 굿. 각잡힌 건줄 알았는데 그건 아니네여..
-                          </p>
-                        </div>
-
-                        <div class="review-summary">
-                          <strong>들고다니기 깜찍하고 좋아여</strong>
-                          <p>★★★★★</p>
-                          <div class="small-gray">
-                            <h5>신동민</h5>
-                            <h5>2022.09.15</h5>
-                            <h5>DR7194-010</h5>
-                            <h5>M</h5>
-                          </div>
-                          <p>이쁘고 깜찍하네요~ 가격대비 좀 작긴 한듯ㅎㅅㅎ</p>
-                        </div>
-
-                        <span class="line">더 많은 리뷰 보기</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="acco-wrapper">
-                  <div class="acco-section close">
-                    <h4 class="acco-title">친환경 소재 더 알아보기</h4>
-                    <div class="acco-content">
-                      <p>
-                        나이키 제품에 사용되는 재생 폴리에스터는 재활용
-                        플라스틱병을 세척한 후 조각으로 분쇄한 알갱이로
-                        만듭니다. 이 알갱이들은 나이키 제품에 사용되는 새로운
-                        고품질 원사로 재탄생하여 최상의 성능을 발휘하는 동시에
-                        환경에 미치는 영향은 줄입니다. 재생 폴리에스터는
-                        폐기물을 줄여줄 뿐 아니라 기존 폴리에스터보다 탄소
-                        배출량을 최대 30% 감축합니다. 나이키는 쓰레기 매립지와
-                        수로에 쌓여있는 연평균 약 10억 개의 플라스틱 병을
-                        재활용하고 있습니다.
-                      </p>
-                      <p><br /></p>
-                      <p>
-                        우리가 스포츠를 즐기며 살아가는 지구의 미래를 보호하기
-                        위해 지속 가능성을 염두에 둔 제품 디자인 과정 등 탄소
-                        제로와 폐기물 제로를 향한 나이키의
-                        <span class="blackline">Move to Zero</span> 에 대해 더
-                        자세히 알아보세요.
-                      </p>
-                      <p><br /></p>
-                      <strong>제품 특징</strong>
-                      <p>
-                        이 제품은 65% 이상 재생 폴리에스터 섬유로
-                        제작되었습니다.
-                      </p>
-                      <p><br /></p>
-                      <span class="blackline">지속 가능 컬렉션 구매하기</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="acco-wrapper">
-                  <div class="acco-section close">
-                    <h4 class="acco-title">배송</h4>
-                    <div class="acco-content">
-                      <strong>일반배송 안내</strong>
-                      <ul class="delivery">
-                        <li>• 배송지역 : 전국(일부 지역 제외)</li>
-                        <li>
-                          • 배송비 : 상품의 구매금액에 상관없이 모든 상품
-                          무료배송
-                        </li>
-                        <li>
-                          • 배송기간 : 결제 후 약 3일 이내 (토요일, 공휴일 제외)
-                        </li>
-                        <li>
-                          • 배송안내 : 상품의 출고지 또는 물류센터 보관장소에
-                          따라 분리 배송
-                        </li>
-                      </ul>
-
-                      <strong
-                        >오늘도착 안내
-                        <span class="back-black">나이키멤버 전용</span></strong
-                      >
-                      <ul class="delivery">
-                        <li>
-                          • 이용시간 : 13시까지 결제 시, 당일도착(공휴일제외)
-                        </li>
-                        <li>
-                          • 이용가능상품 : 상품 상세 페이지
-                          <img
-                            src="https://static-breeze.nike.co.kr/kr/ko_kr/cmsstatic/theme/c-commerce/assets/images/icon-sameday.png"
-                            alt="오늘도착 배송 아이콘"
-                          />
-                          <span class="back-black">오늘도착</span> 표기 제품
-                        </li>
-                        <li>• 이용가능수량 : 1회 주문 시, 최대 수량 2개</li>
-                        <li>
-                          • 이용방법 : 결제화면 배송방식 선택 시, "오늘도착"
-                          배송 선택
-                        </li>
-                        <li>
-                          • 배송지역 : 서울∙과천∙의왕∙군포∙수원∙성남∙안양시
-                          전체, 부천시 중동, 상동, 심곡동, 용인시 수지구∙기흥구
-                        </li>
-                        <li>• 서비스비용 : 5,000원</li>
-                        <li class="notice">
-                          • 오늘도착 안내사항
-                          <span class="line">자세히 보기</span>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="acco-wrapper">
-                  <div class="acco-section close">
-                    <h4 class="acco-title">반품 / AS</h4>
-                    <div class="acco-content">
-                      <strong>무료반품 서비스</strong>
-                      <ul class="service">
-                        <li>
-                          • 상품의 구매금액에 상관없이 무료반품서비스를 제공하고
-                          있습니다.
-                        </li>
-                      </ul>
-
-                      <strong>매장 반품 접수</strong>
-                      <ul class="service">
-                        <li>• 매장 반품 서비스가 한시적으로 중단됩니다.</li>
-                      </ul>
-
-                      <strong>반품 안내</strong>
-                      <ul class="service">
-                        <li>
-                          • 반품접수는 상품수령 후 7일 이내에 상품 미훼손 및
-                          미사용한 경우에만 해당됩니다.
-                        </li>
-                        <li>
-                          • 색상/사이즈 불만족, 고객 변심 반품의 경우, 오늘도착
-                          서비스 (배송)비용에 대한 배송비는 환불되지 않음을
-                          유의해 주시기 바랍니다.
-                        </li>
-                        <li>
-                          • 나이키닷컴 [마이페이지 > 취소/반품]에서 반품 접수
-                          부탁드립니다. 택배사 어플 등을 통한 개별 반품 접수 시
-                          추가 시일이 소요될 수 있습니다.
-                        </li>
-                        <li><span class="line">자세히 보기</span></li>
-                      </ul>
-
-                      <strong>AS 안내</strong>
-                      <ul class="service">
-                        <li>
-                          • 나이키닷컴에서 구매하신 제품에 대해 A/S 접수를
-                          원하실 경우에는 마이페이지 내 A/S 신청·조회 페이지를
-                          이용해 주세요.
-                        </li>
-                        <li><span class="line">자세히 보기</span></li>
-                      </ul>
-
-                      <strong>미성년자 권리보호 안내</strong>
-                      <ul class="service">
-                        <li>
-                          • 미성년 고객께서 상품을 주문(계약) 하시는 경우,
-                          법정대리인(부모님 등)의 동의가 없으면 미성년자 본인
-                          또는 법정대리인(부모님 등)이 그 주문(계약)을 취소하실
-                          수 있습니다.
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="product-modal">
-                <a class="modal-close" onclick="빠잉()">✕</a>
-
-                <div class="item-name">
-                  <div class="item-image">
-                    <img
-                      src="https://static-breeze.nike.co.kr/kr/ko_kr/cmsstatic/product/DR7194-010/835e3635-a0bd-42e6-8fab-1b980527b67b_primary.jpg?thumbnail"
-                      alt="작은 이미지"
-                    />
-                  </div>
-                  <div class="item-txt">
-                    <p>펫밀크</p>
-                    <span style="color: #808080" class="orange"
-                      >브랜드 : cj</span
-                    >
-                    <p>15,000원</p>
-                  </div>
-                </div>
-
-                <div class="item-guide">
-                  <strong>상품정보제공고시</strong>
-                  <div class="item-guide-detail">
-                    <p class="bold">종류</p>
-                    <p class="gray">아이템 백</p>
-
-                    <p class="bold">소재</p>
-                    <p class="gray">폴리에스터 100%</p>
-
-                    <p class="bold">색상</p>
-                    <p class="gray">블랙/화이트</p>
-
-                    <p class="bold">크기</p>
-                    <p class="gray">
-                      정확한 제품의 크기와 중량 정보는 배송 받으신 제품의 라벨을
-                      참고하시기 바랍니다.
-                    </p>
-
-                    <p class="bold">제조자</p>
-                    <p class="gray">Nike inc.</p>
-
-                    <p class="bold">제조국</p>
-                    <p class="gray">
-                      정확한 제조국은 배송 받으신 제품의 라벨을 참고하시기
-                      바랍니다.
-                    </p>
-
-                    <p class="bold">품질보증기준</p>
-                    <p class="gray">관련법 및 소비자분쟁해결 규정에 따름</p>
-
-                    <p class="bold">A/S 책임자와 전화번호</p>
-                    <p class="gray">
-                      (유)나이키스포츠 온라인 스토어 고객센터 / 080-022-0182
-                    </p>
-                  </div>
-                </div>
-
-                <div class="item-notice">
-                  <strong>취급시 주의사항</strong>
-                  <ul>
-                    <li>• 일부 제품은 세탁이 불가합니다.</li>
-                    <li>• 필요 시 천을 사용하여 닦아주십시오.</li>
-                    <li>• 표백제 및 강력효소제는 절대 사용하지 마십시오.</li>
-                    <li>• 다림질을 하지 마십시오.</li>
-                    <li>• 드라이 클리닝을 하지 마십시오.</li>
-                    <li>• 사용 전 취급주의사항을 보고 사용하여 주십시오.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        </div>
       </article>
-
-      <!-- <script type="text/javascript" src="script.js"></script> -->
     </div>
   </div>
 </template>
 
 <script>
 import ProductCategory from "@/components/store/product/ProductCategory.vue";
-import { onMounted } from "vue";
+import ProductHeader from "@/components/store/product/ProductHeader.vue";
+import { ref, onMounted } from "vue";
 export default {
   components: {
     ProductCategory,
+    ProductHeader,
   },
   setup() {
+    const product = ref({
+      productIdx: 1,
+      category: "사료",
+      productName: "프로플랜 센서티브 스킨 앤 스토막 어덜트",
+      brand: "퓨리나",
+      price: 87000,
+      productImg:
+        "https://images-dev.wefluffy.co.kr/product-option/1192/modify_detail_056.webp",
+      productDetail:
+        "프로플랜 센서티브 스킨 앤 스토막 어덜트프로플랜 센서티브 스킨 앤 스토막 어덜트",
+      volume: "12kg",
+    });
+
+    const optionList = ref([
+      { name: "선택해주세요.", value: "" },
+      { name: "사료", value: 1 },
+    ]);
+
+    const selectedOption = ref("");
+
+    const setSelect = () => {
+      if (selectedOption.value !== "") {
+        const option = document.getElementsByClassName("options")[0];
+        option.style.display = "block";
+        document.getElementById("alltotal").innerHTML =
+          product.value.price.toLocaleString();
+      } else {
+        const option = document.getElementsByClassName("options")[0];
+        option.style.display = "none";
+        document.getElementById("alltotal").innerHTML = 0;
+      }
+    };
+
+    // 선택한 수량 결과 닫기 함수
+    const close = () => {
+      selectedOption.value = "";
+      const option = document.getElementsByClassName("options")[0];
+      option.style.display = "none";
+      document.getElementById("total").innerHTML =
+        product.value.price.toLocaleString();
+      document.getElementById("alltotal").innerHTML = 0;
+      document.getElementById("warning").style.display = "none";
+
+      // 수량 결과를 표시할 element
+      let resultElement = document.getElementById("result");
+
+      resultElement.value = 1;
+    };
+
+    const count = (type) => {
+      // 수량 결과를 표시할 element
+      let resultElement = document.getElementById("result");
+
+      // 현재 화면에 표시된 수량 값
+      let number = resultElement.value;
+
+      // 수량 더하기/빼기
+      if (type === "plus") {
+        number = parseInt(number) + 1;
+      } else if (type === "minus") {
+        number = parseInt(number) - 1;
+      }
+      if (number < 1) {
+        number = 1;
+        document.getElementById("warning").style.display = "block";
+      } else {
+        document.getElementById("warning").style.display = "none";
+      }
+
+      var p1 = (product.value.price * number).toLocaleString();
+      var pa = (p1 * number).toLocaleString();
+
+      var totalPrice = p1;
+      document.getElementById("total").innerHTML = totalPrice;
+      document.getElementById("alltotal").innerHTML = totalPrice;
+      // 결과 출력
+      resultElement.value = number;
+    };
+
     onMounted(() => {
       checkFunc();
     });
@@ -488,793 +268,1157 @@ export default {
 
     return {
       checkFunc,
+      setSelect,
+      count,
+      close,
+      product,
+      optionList,
+      selectedOption,
     };
   },
 };
 </script>
 
 <style scoped>
-@import "@/assets/css/store/product/list/product-list.css";
-/* @import "@/assets/css/store/product/detail/product-detail.css"; */
+@charset "utf-8";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Crete+Round:ital@1&family=Hahmlet:wght@100;200;300;400;500;600;700;800&display=swap");
 
-strong {
-  display: block;
-  font-size: 1.1rem;
-  padding-top: 10px;
-}
-
-.menu-box-1 {
-  text-align: center;
-}
-.menu-box-1 > ul > li {
-  width: calc(100% / 7);
-}
-.menu-box-1 ul > li > a {
-  display: block;
-  padding: 5px 0;
-  font-weight: bold;
-}
-.menu-box-1 ul > li:hover > a {
-  color: red;
-  text-decoration: underline;
-}
-.menu-box-1 > ul ul {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  z-index: 1;
-}
-.menu-box-1 > ul ul::after {
-  content: "";
-  background-color: rgba(200, 200, 200, 0.5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-top: 1px solid gray;
-  z-index: -1;
-}
-.menu-box-1 > ul ul > li > a {
+@font-face {
+  font-family: "RIDIBatang";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff")
+    format("woff");
   font-weight: normal;
-  font-size: 0.8rem;
-  padding: 3px 0;
-}
-.menu-box-1 ul > li {
-  position: relative;
-}
-.menu-box-1 > ul > li:hover > ul {
-  display: block;
+  font-style: normal;
 }
 
-/* 메뉴 구분선 */
-.menu-box-1 > ul > li > a::after {
-  content: "";
-  width: 2px;
-  height: 50%;
-  /* background-color: black; */
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translatey(-50%);
-}
-.menu-box-1 > ul > li:first-child > a::before {
-  content: "";
-  width: 2px;
-  height: 50%;
-  /* background-color: black; */
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translatey(-50%);
+h1,
+h2 {
+  font-weight: 700;
 }
 
-@media (max-width: 1000px) {
-  .menu-box-1,
-  .logo-bar {
-    display: none;
-  }
-  .top-bar {
-    display: block;
-  }
+h3,
+h4,
+h5 {
+  font-weight: 500;
 }
-
-/*--------- default setting ---------*/
 
 h2 {
-  font-family: "SLEIGothicTTF";
-  font-size: 2rem;
-  line-height: 2.8rem;
-  padding: 15px 0;
+  font-size: 2.8rem;
+  line-height: 4rem;
 }
 
 h3 {
-  font-size: 1.5rem;
-  line-height: 2.5rem;
-  padding: 30px 0;
+  font-size: 2.2rem;
+  line-height: 3rem;
 }
 
 h4 {
-  font-size: 1.3rem;
-  line-height: 2rem;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
 }
 
 h5 {
-  font-size: 0.95rem;
-  line-height: 1.5rem;
-  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 2rem;
 }
 
-#pd-detail-btn {
-  display: inline-block;
-  padding: 15px 0;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: bold;
-  background: none;
-  border: 1px solid #888;
-  transition: 0.3s;
-  cursor: pointer;
+a:link {
+  color: #111;
+  line-height: 2rem;
+  text-decoration: none;
 }
 
-#pd-detail-btn:hover {
-  background: #e5e5e5;
-  border: 1px solid #000;
+a:hover,
+a:focus {
+  text-decoration: none;
 }
 
 li {
   list-style: none;
 }
 
-#detail-img {
-  width: 100%;
-  vertical-align: top;
-}
-
-/*--------- common class setting ---------*/
-.bold {
-  font-weight: bold;
-}
-
-.gray {
-  color: #777;
-}
-
-.small-gray {
-  color: #777;
-  font-size: 0.75rem;
-}
-
-.orange {
-  font-weight: bold;
-  color: #dd602a;
-}
-
-.line {
+.productDetailImg {
   display: block;
-  color: #777;
-  font-size: 0.9rem;
-  margin-top: 15px;
-  text-decoration: underline;
+  vertical-align: bottom;
+}
+
+button {
+  width: auto;
+  font-size: 1rem;
+  font-weight: 700;
+  background: transparent;
+  border: transparent;
   cursor: pointer;
-  transition: 0.2s;
-}
-
-.line:hover {
-  color: #000;
-  font-weight: bold;
-}
-
-.blackline {
-  color: #000;
-  font-weight: bold;
-  text-decoration: underline;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.blackline:hover {
-  color: #dd602a;
-}
-
-.back-black {
-  background-color: #000;
-  color: #fff;
-  font-size: 0.9rem;
-  padding: 0 2px;
-}
-
-.size,
-.quantity,
-.mo-btn-box,
-.pc-btn-box,
-.stop-pickup,
-.color-style {
-  padding: 30px 5%;
-}
-
-.acco-title,
-.acco-content {
-  padding: 20px 5%;
-}
-
-.detail,
-.option-box,
-.pickup,
-.custom,
-.acco-wrapper {
-  border-bottom: 1px solid #d5d5d5;
-}
-
-.acco-content,
-.real-review {
-  border-top: 1px solid #d5d5d5;
-}
-
-/*--------- product ---------*/
-.product {
-  padding: 50px 0;
-  margin: 0 auto;
-}
-
-.product .mo-into-title,
-.infomation .pc-into-title {
-  padding: 30px 5%;
-}
-
-.product .mo-into-title .sub-title,
-.infomation .pc-into-title .sub-title {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
 }
 
-.product .follow-btn-box {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px 5%;
-  background: #fff;
-  border-top: 1px solid #ddd;
-  z-index: 3;
-}
-
-.follow-btn-box #pd-detail-btn[name="justdoit"] {
-  background: #dd602a;
-}
-
-.detail {
-  width: 100%;
-  padding-bottom: 50px;
-}
-
-.detail-photo {
-  position: relative;
-}
-
-.infomation .pc-into-title {
-  display: none;
-}
-
-.size h5 {
-  background-color: #f5f5f5;
-}
-
-.size #pd-detail-btn {
-  width: 80px;
-  margin-top: 20px;
-  border-radius: 5px;
-}
-
-.size-wrapper {
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 20px;
-}
-
-.size-wrapper .line {
-  margin-top: 0;
-}
-
-.quantity {
-  border-bottom: 1px solid #ddd;
-}
-
-.quantity span {
-  display: inline-block;
-  font-size: 1.2rem;
+button img {
+  height: 20px;
   vertical-align: middle;
-  margin-right: 10px;
 }
 
-.quantity input {
-  height: 35px;
-  width: 60px;
-  text-align: center;
-  font-size: 1.2rem;
-  border: 0;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 10px;
+textarea {
+  width: 100%;
+  padding: 14px;
+  margin: 20px 0;
+  background: #eee;
+  border: 1px solid #ddd;
+  color: #222;
+  line-height: 1.2rem;
+  text-align: left;
+  resize: none;
 }
 
-.minus,
-.plus {
-  padding: 2px 0;
-  width: 40px;
-  text-align: center;
-  border: 2px solid #ddd;
-  background: #f5f5f5;
-  border-radius: 10px;
-  font-size: 2rem !important;
-  line-height: 2rem;
-  cursor: pointer;
+/*----text start--------*/
+.title {
+  font-weight: 700;
 }
 
-.product .follow-btn-box,
-.mo-btn-box {
-  display: flex;
-  justify-content: space-between;
+.subtitle,
+.import {
+  font-weight: 500;
 }
 
-.product .follow-btn-box #pd-detail-btn,
-.mo-btn-box #pd-detail-btn {
-  width: 46%;
+.pricetxt {
+  font-weight: 700;
+}
+
+.guidetxt {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.moview.guidetxt {
+  color: #f53d4f99;
+}
+
+/*----btns start--------*/
+.main_primary {
+  transition: all 0.2s;
+  padding: 15px 25px;
+  margin: 0px auto;
   border-radius: 50px;
+  color: #fff;
+  background: #4d4d4d;
+  z-index: 10;
 }
 
-.pc-btn-box {
-  display: none;
+.main_primary:hover {
+  background: #5865f5;
 }
 
-#pd-detail-btn[name="justdoit"] {
-  border: 3px solid #fff;
+.main_secondry {
+  padding: 10px 0;
+  border-bottom: 2px solid #ffffff00;
+}
+
+.main_secondry:after {
+  content: " 〉";
+  font-weight: 800;
+  margin-left: 10px;
+  transform: translateX(0px);
+  transition: all 0.2s;
+}
+
+.main_secondry:hover {
+  border-bottom: 2px solid #fff;
+}
+
+.main_secondry:hover:after {
+  transform: translateX(10px);
+}
+
+.input_primary {
+  width: 100%;
+  padding: 12px;
+  margin: 0 auto;
   background: #000;
   color: #fff;
+  outline: 1px solid #000;
 }
 
-#pd-detail-btn[name="justdoit"]:hover {
-  border: 3px solid #dd602a;
-  background: rgba(221, 96, 42, 0.3);
-  color: #000;
+.input_primary:hover {
+  background: #5865f5;
+  outline: 1px solid #5865f5;
 }
 
-/*--------- product accordion part---------*/
-.acco-content h3 {
-  padding: 10px 0;
-}
-
-.review {
-  margin: 20px 0;
-}
-
-.review .gage {
-  position: relative;
+.input_secondary {
   width: 100%;
-  height: 4px;
-  margin: 15px 0;
-  background-color: #ddd;
+  padding: 12px;
+  margin: 0 auto;
+  color: #fff;
+  background: #4d4d4d;
+  outline: 1px solid #3d3d3d;
 }
 
-.review .gage-color-dot,
-.review .gage-size-dot {
-  position: absolute;
-  top: -3px;
-  width: 10px;
-  height: 10px;
-  background-color: #000;
-  border-radius: 50%;
+.input_secondary:hover {
+  background: #757ef7;
+  outline: 1px solid #5865f5;
 }
 
-.review .gage-color-dot {
-  left: 50%;
+.input_other {
+  width: 99%;
+  padding: 12px;
+  margin: 0 auto;
+  background: #fff;
+  color: #5865f5;
+  outline: 1px solid #5865f5;
 }
 
-.review .gage-size-dot {
-  left: 26%;
+.input_other:hover {
+  background: #e6e8fd;
 }
 
-.review .review-value .value-txt {
-  display: flex;
-  justify-content: space-between;
-}
-
-.real-review {
-  padding: 30px 0 10px;
-}
-
-.real-review .review-summary {
-  padding-bottom: 40px;
-}
-
-.review-summary * {
-  display: block;
-  padding: 5px 0;
-}
-
-.review-summary .small-gray {
-  display: flex;
-}
-
-.review-summary .small-gray h5 {
-  margin-right: 15px;
-}
-
-.acco-wrapper .acco-title {
-  font-family: "Happiness-Sans-Title";
-  position: relative;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-.acco-wrapper .acco-title:after {
-  content: "﹀";
-  position: absolute;
-  display: block;
+.social_btn {
   width: 30px;
   height: 30px;
-  top: 27px;
-  right: 20px;
+  padding: 6px;
+  outline: 1px solid #d1d1d1;
 }
 
-.delivery,
-.service {
-  padding: 20px 0 30px;
-}
-
-.delivery img {
-  width: 35px;
-  vertical-align: middle;
-}
-
-.delivery .notice {
-  display: flex;
-}
-
-.delivery .notice .line {
-  margin: 0 0 0 8px;
-}
-
-/*--------- product modal part---------*/
-.product-modal {
+/*----input start-------------*/
+[type="text"].inputData,
+[type="password"].inputData,
+[type="email"].inputData,
+[type="tel"].inputData {
   width: 100%;
-  height: 100vh;
-  padding: 50px 5%;
-  background-color: #fff;
+  height: 45px;
+  padding: 20px 0;
+  border: 0px;
+  border-bottom: 1.5px solid #e7e7e7;
+  border-radius: 0;
+  transition: all 0.2s;
+}
+
+.inputData:focus {
+  border-bottom: 1.5px solid #5865f5;
+}
+
+.tab-content .input-option {
+  font-size: 0.8rem;
+  width: 100%;
+  padding: 10px 0 15px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.tab-content .input-option > :nth-child(1) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+[type="checkbox"].keepSave {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background-position: top;
+  outline: none;
+  appearance: none;
+  display: block;
+  cursor: pointer;
+}
+
+/* 체크 상태 */
+[type="checkbox"]:checked.keepSave {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  outline: none;
+  appearance: none;
+  background-position: bottom;
+  cursor: pointer;
+}
+
+.keepSave + label {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.tab-content .guidetxt {
+  padding: 10px 0 14px 0;
+}
+
+.tab-content .guidetxt li {
+  font-size: 0.8rem;
+  line-height: 1.2rem;
+  text-align: left;
+  padding: 6px;
+}
+
+.tab-content .btns-box {
+  width: 100%;
+  padding: 30px 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tab-content .btns-box .social_btn {
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  outline: 1px solid #d1d1d1;
+  display: inline-block;
+}
+
+/*--하트버튼 시작-----*/
+.swiper-slide .btn-like {
   position: absolute;
-  top: 0;
+  top: 40px;
+  right: 40px;
+  /* background: url("../images/ic/ic_heart_000.png") no-repeat; */
+  background-size: cover;
+  background-position: center;
+  width: 30px;
+  height: 30px;
+  display: block;
+  cursor: pointer;
+  z-index: 1;
+  opacity: 0.3;
+}
+
+.swiper-slide .btn-like:hover {
+  opacity: 0.9;
+}
+
+.swiper-slide .btn-like.liked {
+  transition: all 0.1s;
+  width: 30px;
+  height: 30px;
+  /* background: url("../images/ic/ic_heart_001.png") no-repeat; */
+  background-size: cover;
+  background-position: center;
+  opacity: 9;
+  animation: move-top 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.swiper-slide .btn-like span {
+  visibility: hidden;
+}
+
+/*--슬라이드 옵션아이템 class 시작----*/
+.event:before {
+  content: "EVENT";
+  /* font-family: ; */
+  line-height: 2rem;
+  width: 100%;
+  padding: 0 6px;
+  color: #fff;
+  background: #7f7f7f;
+  border: 1px solid #e1e1e1;
+  border-radius: 6px;
+}
+
+.new:before {
+  content: "NEW";
+  /* font-family: ; */
+  display: block;
+  color: #fc7600;
+}
+
+.hot:before {
+  content: "HOT";
+  /* font-family: ; */
+  display: block;
+  color: #e70000;
+}
+
+.soldout:before {
+  content: "일시품절";
+  /* font-family: ; */
+  display: block;
+  color: #888;
+}
+
+.swiper-slide .product-img.color1:after {
+  content: "+1 colors";
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  display: block;
+  padding: 0px 4px;
+  background: #ffffff99;
+  transition: all 0.3s;
+  opacity: 0;
+}
+
+/*supports box*/
+.select {
+  position: relative;
+  width: 260px;
+}
+
+.select_default {
+  padding: 13px 30px 13px 14px;
+  text-align: left;
+  line-height: 1rem;
+  border: 1.5px solid #c4c4c4;
+  border-radius: 10px;
+  /* background: url("../images/ic/ic_all_angle_down.png") center right 14px */
+  /* no-repeat; */
+  background-size: 14px;
+  background-color: #fff;
+  cursor: pointer;
+  /* 말줄임 */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.select_default:hover {
+  border: 1.5px solid #5865f5;
+}
+
+.option_list {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 49px;
   left: 0;
-  position: fixed;
-  overflow: scroll;
+  border: 1.5px solid #c4c4c4;
+  box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  background: #fff;
+  z-index: 10;
+}
+
+.select_default.on {
+  background-size: 14px;
+  border: 1.5px solid #5865f5;
+}
+
+.select_default.on + .option_list {
+  display: block;
+}
+
+.option_list .option {
+  padding: 7px 13px;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  /* 말줄임 */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.option_list .option:hover {
+  background: #5865f511;
+}
+
+/*----keyframes start--------*/
+@keyframes move-top {
+  0% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-show-right {
+  0% {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-show-left {
+  0% {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-show-top {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-show {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+/*--nav start--------------*/
+header {
+  width: 100%;
+  height: 60px;
+  padding: 0 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  position: relative;
+}
+
+header .logo_link {
+  height: 20px;
+}
+
+header .logo_link img {
+  height: 100%;
+}
+
+header .head_menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+header .head_menu .menu_item {
+  color: #000;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+header .head_menu .menu_item:hover {
+  color: #5865f5;
+}
+
+header .head_menu .menu_item.pcview {
   display: none;
 }
 
-.modal-close {
-  position: absolute;
-  top: 20px;
-  right: 3%;
-  font-size: 25px;
-  font-weight: bold;
-  padding: 7px;
-  text-align: center;
-  vertical-align: middle;
-  transition: 0.4s;
-  cursor: pointer;
-}
-
-.modal-close:hover {
-  background: #444;
-  color: #fff;
-  border-radius: 5px;
-}
-
-.item-name {
-  display: flex;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #ddd;
-}
-
-.item-txt {
-  margin-left: 10px;
-}
-
-.item-guide {
-  padding: 20px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.item-guide-detail {
-  padding: 20px 10px;
-}
-
-.item-guide-detail .gray:not(:last-child) {
-  margin-bottom: 15px;
-}
-
-.item-notice {
-  padding: 20px 0;
-}
-
-.item-notice ul {
-  padding-top: 20px;
-}
-
-/*--------- product JS class---------*/
-.acco-section {
-  display: block;
-}
-
-.acco-section.close {
-  height: 70px;
-}
-
-.close .acco-content {
-  height: 0px;
-  transition: height 1s ease-out;
-  transform: scaleY(0);
-}
-
-.open .acco-content {
-  width: 100%;
-  display: block;
-  transform: scaleY(1);
-  transform-origin: top;
-  transition: transform 0.4s ease;
-}
-
-.open .acco-title {
-  margin: 0px;
-  background-color: rgba(221, 96, 42, 0.2);
-  border: 1px solid #dd602a;
-}
-
-/*--------- recommend ---------*/
-.recommend {
-  position: relative;
-  padding: 50px 10%;
-  width: 100%;
-}
-
-.recommend .pre,
-.recommend .next {
-  position: absolute;
-  top: 45%;
+header .head_menu .material-symbols-outlined {
   font-size: 2rem;
-  line-height: 2rem;
-  font-weight: bold;
-  color: white;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 10%;
-  padding: 5px;
-  text-align: center;
+  font-weight: 400;
+  display: block;
+}
+
+/* nav 시작 */
+header nav {
+  position: absolute;
+  top: 0;
+}
+
+header nav .nav-item {
+  padding: 0 6%;
+  position: relative;
+}
+
+header nav .nav-item .material-symbols-outlined {
+  font-size: 2rem;
+  line-height: 3.8rem;
+  transform: rotate(0deg);
+  transition: all 0.2s;
   cursor: pointer;
-  transition: 0.4s;
-  z-index: 3;
 }
 
-.recommend .pre:hover,
-.recommend .next:hover {
-  background: #000;
+header nav .nav-item .material-symbols-outlined:hover {
+  transform: rotate(180deg);
 }
 
-.recommend .pre {
-  left: 1px;
+header nav .nav-item .nav_status {
+  padding: 20px 0;
+  color: #212121;
+  transition: all 0.2s;
 }
 
-.recommend .next {
-  right: 1px;
+header nav .nav-item .nav_status img {
+  width: 40px;
+  cursor: pointer;
 }
 
-.recommend h2 {
-  padding: 0 0 30px;
-  text-align: center;
-}
-
-.recommend .slide-container {
-  overflow: hidden;
-}
-
-.recommend .slider {
-  margin: 0 auto;
-  width: 100%;
+header nav .nav-item .nav_option {
+  padding: 10px 0;
   display: flex;
-  transition: all 0.5s ease-in-out;
+  justify-content: space-between;
 }
 
-.slide-item,
-.slide-img,
-.slide-txt {
-  width: 140px;
+header nav .nav-item .nav_option li {
+  font-size: 1.2rem;
+  font-weight: 500;
+  width: 100%;
+  color: #464a4c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
 }
 
-.slide-txt {
-  padding-top: 10px;
+header nav .nav-item .nav_option li:hover {
+  color: #5865f5;
+  background: #5865f511;
 }
 
-.slide-item:not(:last-child) {
-  margin-right: 10px;
+header nav .nav-item .nav_option li:not(:last-child):after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 2rem;
+  background: #ddd;
+  display: block;
 }
 
-.slide-item {
+header nav .nav-item .gnb .gnb-d1 span {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding: 14px 0;
+  color: #464a4c;
+  display: block;
+  transition: all 0.3s;
   cursor: pointer;
 }
 
-.slide-img {
-  overflow: hidden;
-  border: 2px solid white;
-  transition: 0.4s;
+header nav .nav-item .gnb .gnb-d1 span:hover {
+  color: #5865f5;
 }
 
-.slide-img img {
-  transition: 0.4s;
+#mognb {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  background: #fff;
+  z-index: 100;
+  transition: all 0.2s;
+  overflow-x: hidden;
+  position: fixed;
+}
+
+#mognb.on {
+  transform: translateX(-0%);
+}
+
+#mognb.hide {
+  transform: translateX(100%);
+}
+
+header .search-item {
+  padding: 0 6%;
+}
+
+header .search-item .material-symbols-outlined {
+  font-size: 2rem;
+  line-height: 3.8rem;
+  transform: rotate(0deg);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+header .search-item .material-symbols-outlined:hover {
+  transform: rotate(180deg);
+}
+
+header .search-item .input_wrap {
+  display: flex;
+  align-items: center;
+}
+
+header .search-item .input_wrap button {
+  width: 30px;
+  height: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xml:space='preserve' style='enable-background:new 0 0 40 40' viewBox='0 0 40 40'%3E%3Cpath d='m30.6 28.1 7.7 7.7-2.6 2.6-7.7-7.7c-7 5.6-17.2 4.5-22.8-2.6S.8 10.8 7.8 5.2 25 .8 30.6 7.8c4.7 5.9 4.7 14.3 0 20.3zM27 26.7c4.9-5 4.7-13-.3-17.9s-13-4.7-17.9.3-4.7 13 .3 17.9c4.9 4.8 12.7 4.8 17.6 0l.3-.3z'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+header .search-item .input_wrap button span {
+  visibility: collapse;
+}
+
+header .search-item .remove {
+  display: none;
+}
+
+header .search-item img {
+  width: 100%;
+}
+
+header .subject {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+#search {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  background: #fff;
+  z-index: 100;
+  transition: all 0.2s;
+  overflow-x: hidden;
+  position: fixed;
+}
+
+#search.on {
+  transform: translateX(-0%);
+}
+
+#search.hide {
+  transform: translateX(100%);
+}
+
+/*------------------------------------*/
+.btns-box .purchase_like {
+  /* background: url("../images/ic/ic_heart_000.png") no-repeat; */
+  background-size: cover;
+  background-position: center;
+  width: 30px;
+  height: 30px;
+  display: block;
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+.btns-box .purchase_like:hover {
+  opacity: 0.9;
+}
+
+.btns-box {
+  margin-top: -20px;
+}
+
+.btns-box .purchase_like.liked {
+  transition: all 0.1s;
+  width: 30px;
+  height: 30px;
+  /* background: url("../images/ic/ic_heart_001.png") no-repeat; */
+  background-size: cover;
+  background-position: center;
+  opacity: 9;
+  animation: move-top 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.btns-box .purchase_like span {
+  visibility: hidden;
+}
+
+/*--article start-----*/
+.purchase-sec {
+  width: 100%;
+  padding: 0 0;
+  margin: 0 auto;
+  /* border-top: 1px solid #ddd; */
+}
+
+.purchase-sec .product_wrap {
+  margin: 0 auto;
+}
+
+.product_wrap .shopView .viewHeader {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.product_wrap .shopView .viewHeader .productImg {
+  width: 100%;
+  margin: 0 auto;
+  background: #f1f1f1;
+}
+
+.product_wrap .shopView .viewHeader .productImg .mainImg {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+.product_wrap .shopView .viewHeader .productImg .mainImg img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.product_wrap .shopView .viewHeader .productImg .subImg .swiper-slide {
+  max-width: 600px;
+  padding: 30px;
+  cursor: pointer;
+}
+
+.product_wrap .shopView .viewHeader .productImg .subImg .swiper-slide img {
   transform: scale(1);
+  transition: all 0.3s;
 }
 
-.slide-item:hover .slide-img {
-  border: 2px solid #dd602a;
-}
-
-.slide-item:hover .slide-img img {
+.product_wrap
+  .shopView
+  .viewHeader
+  .productImg
+  .subImg
+  .swiper-slide:hover
+  img {
   transform: scale(1.2);
 }
 
-.recommend .slide-txt .gray {
+.product_wrap .mySwiperProd .swiper-button-prev {
+  width: 30px;
+  height: 30px;
+  /* background: url("../images/ic/ic_all_angle_left.png") no-repeat center left; */
+  background-size: cover;
+  opacity: 0.5;
+  transform: translateX(-5px);
+  transition: all 0.2s;
+}
+
+.product_wrap .mySwiperProd .swiper-button-next {
+  width: 30px;
+  height: 30px;
+  /* background: url("../images/ic/ic_all_angle_right.png") no-repeat center right; */
+  background-size: cover;
+  opacity: 0.5;
+  transform: translateX(5px);
+  transition: all 0.2s;
+}
+
+.product_wrap .mySwiperProd .swiper-button-prev:hover {
+  opacity: 1;
+  transform: translateX(-10px);
+}
+
+.product_wrap .mySwiperProd .swiper-button-next:hover {
+  opacity: 1;
+  transform: translateX(10px);
+}
+
+.product_wrap .mySwiperProd .swiper-button-next::after,
+.product_wrap .mySwiperProd .swiper-button-prev::after {
+  display: none;
+}
+
+.product_wrap .shopView .viewHeader .productImg .subImg img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.product_wrap .shopView .viewHeader .productInfo {
+  width: 100%;
+  padding: 0 6%;
+  margin: 0 auto;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .infoItem {
+  width: 100%;
+  padding: 20px 0;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .infoItem.title {
+  padding: 30px 0 20px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .title .deliver {
+  margin-top: 30px;
+  color: #5865f5;
   display: block;
 }
 
-/*--------- pc ver. ---------*/
-@media screen and (min-width: 1366px) {
-  .product {
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .mo-into-title,
-  .product .follow-btn-box,
-  .mo-btn-box {
-    display: none;
-  }
-
-  .product > section {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .product .detail {
-    width: 65%;
-    border: 0;
-  }
-
-  .product .infomation {
-    width: 33%;
-  }
-
-  .infomation .pc-into-title,
-  .pc-btn-box {
-    display: block;
-  }
-
-  .pc-side-btn {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-
-  .pc-side-btn #pd-detail-btn {
-    width: 48%;
-    border-radius: 50px;
-  }
-
-  #pd-detail-btn[name="justdoit"] {
-    width: 100%;
-    border: 3px solid #fff;
-    background: #000;
-    color: #fff;
-    border-radius: 50px;
-  }
-
-  #pd-detail-btn[name="wish"] {
-    background: url("https://cdn-icons-png.flaticon.com/512/1076/1076818.png")
-      no-repeat;
-    background-size: 25px auto;
-    background-position: 130px;
-    padding-right: 15px;
-  }
-
-  #pd-detail-btn[name="wish"]:hover {
-    background: url("https://cdn-icons-png.flaticon.com/512/290/290583.png")
-      no-repeat;
-    background-color: lavenderblush;
-    background-size: 25px auto;
-    background-position: 130px;
-  }
-
-  .recommend {
-    width: 1250px;
-    margin: 0 auto;
-    padding: 100px 0;
-  }
-
-  .recommend h2 {
-    padding-bottom: 50px;
-  }
-
-  .recommend .pre,
-  .recommend .next {
-    font-size: 2.5rem;
-    line-height: 2.5rem;
-  }
-
-  .recommend .pre {
-    left: -40px;
-  }
-
-  .recommend .next {
-    right: -40px;
-  }
-
-  .slide-item,
-  .slide-img,
-  .slide-txt {
-    width: 350px;
-  }
-
-  .slide-item:not(:last-child) {
-    margin-right: 30px;
-  }
+.product_wrap .shopView .viewHeader .productInfo .title .price {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 3rem;
 }
 
-.price {
-  border-bottom: 1px solid #e6e6e6;
-  padding-bottom: 16px;
+.product_wrap
+  .shopView
+  .viewHeader
+  .productInfo
+  .infoItem.title
+  .btns-box
+  .purchase_like {
+  margin-top: 10px;
 }
-.price:after {
+
+.product_wrap .shopView .viewHeader .productInfo .itemOptions {
+  padding: 16px 0;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .membership > p {
+  margin-bottom: 30px;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .membership ul {
+  display: flex;
+  gap: 30px;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .membership ul .vip {
+  color: #5865f5;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .colors {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .colors .color-option {
+  width: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .colors .color-option li {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.product_wrap
+  .shopView
+  .viewHeader
+  .productInfo
+  .colors
+  .color-option
+  li:hover {
+  border: 3px solid #5865f5;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .colors .color-option .white {
+  background: #ddd;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .colors .color-option .black {
+  background: #000;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .colors .color-option li span {
+  visibility: hidden;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .itemOptions select {
+  width: 100%;
+  height: 40px;
+  padding: 6px;
   display: block;
-  content: "";
-  clear: both;
-}
-.cost-price {
-  float: left;
-  margin: 5px 0 0 20px;
-  font-size: 15px;
-  color: #5a5a5a;
-  text-decoration: line-through;
-}
-.sale-price {
-  float: left;
-  margin: 15px 0 0 -55px;
-  font-family: "Tahoma";
-  font-weight: bold;
-  font-size: 25px;
-}
-.price ~ .manufact,
-.categori,
-.origin {
-  padding: 16px 0 16px 10px;
-  border-bottom: 1px solid #e6e6e6;
-  font-size: 18px;
-  white-space: pre;
-}
-.price ~ .manufact span,
-.categori span,
-.origin span {
-  color: #6a6a6a;
+  border: 1px solid #cdcdcd;
 }
 
-.box {
-  border-radius: 15px 15px 15px 15px;
-  width: 150px;
-  padding: 10px;
+/** 수정중! */
+.selectOptionResult .options {
+  display: none;
+}
+
+.selectOptionResult .options ul {
+  width: 100%;
+  padding: 30px 10px;
+  margin-top: 15px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 10px 0;
+  border: 1px solid #ddd;
+}
+
+.selectOptionResult .options ul li .count {
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+}
+
+.selectOptionResult .options ul li .count .countbtn {
+  width: 30px;
+  padding: 0 10px;
+  color: #bbb;
+  cursor: pointer;
+  /* transition: background: */
+}
+
+.selectOptionResult .options ul li .count input[type="number"] {
+  font-weight: 700;
+  width: 35px;
+  text-align: right;
+  outline: 0px;
+  border: 0px;
+}
+
+.selectOptionResult .options ul > :nth-child(3) {
+  min-width: 100px;
+  text-align: right;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .all-price {
+  font-size: 1.2rem;
+  padding: 20px 0;
+  text-align: right;
+  white-space: nowrap;
+  display: block;
+}
+
+.product_wrap .shopView .viewHeader .productInfo .all-price span {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-right: 3px;
+  color: #5865f5;
+}
+
+.product_wrap .shopView .viewHeader .productInfo > .btns-box {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#warning {
+  font-weight: 400;
+  color: #5865f5;
+  display: none;
+}
+
+/*----article start-------------*/
+.purchaseinfo-sec .viewBody {
+  max-width: 1200px;
+  margin-top: 60px;
+  padding: 120px 6%;
+  margin: 0 auto;
+}
+
+.purchaseinfo-sec .viewBody .tabList {
+  display: flex;
+  justify-content: space-between;
+}
+
+.purchaseinfo-sec .viewBody .tabList .list {
+  width: calc(100% / 3);
+  line-height: 3rem;
   text-align: center;
-  color: #555;
-  border: 1px solid transparent;
+  display: block;
+  cursor: pointer;
+  transition: 0.2s;
+  border-bottom: 2px solid #ddd;
 }
 
-.ivory {
-  background-color: #fcf8e3;
-  border-color: #faebcc;
-  color: #8a6d3b;
+.purchaseinfo-sec .viewBody .tabList .list:hover,
+.purchaseinfo-sec .viewBody .tabList .list.on {
+  color: #5865f5;
+  border-bottom: 2px solid #5865f5;
+}
+
+.purchaseinfo-sec .viewBody .tabCont {
+  width: 100%;
+}
+
+.purchaseinfo-sec .viewBody .tabCont .tabInner {
+  display: none;
+}
+
+.purchaseinfo-sec .viewBody .tabCont .tabInner.on {
+  display: block;
+}
+
+@media screen and (min-width: 900px) {
+  .purchase-sec {
+    padding: 0 0;
+  }
+
+  .product_wrap .shopView {
+    width: 88%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .product_wrap .shopView .viewHeader {
+    flex-direction: row;
+    gap: 60px;
+  }
+
+  .product_wrap .shopView .viewHeader .productImg {
+    min-width: auto;
+    max-width: 700px;
+    padding: 0 0;
+  }
+
+  .product_wrap .shopView .viewHeader .productImg .mainImg {
+    height: 600px;
+  }
+
+  .product_wrap .shopView .viewHeader .productImg .mainImg {
+    max-width: 800px;
+    padding: 0 0;
+    max-height: auto;
+  }
+
+  .product_wrap .shopView .viewHeader .productInfo {
+    width: 100%;
+    max-width: auto;
+    padding: 0 0;
+  }
+
+  .product_wrap .shopView .viewHeader .productInfo .membership ul li {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+  }
+
+  .product_wrap .shopView .viewHeader .productInfo .all-price {
+    width: 100%;
+    padding: 15px 0 30px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  /*----article start-------------*/
+  .purchaseinfo-sec .viewBody {
+    padding: 60px 0 120px 0;
+    margin: 0 auto;
+  }
 }
 </style>

@@ -58,7 +58,7 @@
                     @click="moveToPage"
                     >KANG-ONMEETING</router-link
                   >
-                  <router-link :to="{ name: 'ProductList' }" @click="moveToPage"
+                  <router-link :to="{ name: 'ProductPage' }" @click="moveToPage"
                     >Store</router-link
                   >
                 </div>
